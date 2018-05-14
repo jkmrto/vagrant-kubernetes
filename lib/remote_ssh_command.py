@@ -50,13 +50,14 @@ def send_cmd_and_return_response(ssh, cmd):
         rl, wl, xl = select.select([stdout.channel], [], [], 0.0)
         if len(rl) > 0:
             # Print data from stdout
+            print(str(stdout.channel.recv(1024).decode('utf-8')))
             simple_str += str(stdout.channel.recv(1024).decode('utf-8'))
 
     return simple_str
 
 
 def ssh_execution(func):
-    def wrapper(argument, host, user, password=None):
+    def wrapper(argument, host, user, password=None, pkey=None):
         i = 1
         ssh = None
         #
@@ -72,7 +73,7 @@ def ssh_execution(func):
                 if password:
                     ssh.connect(host, username=user, password=password, allow_agent=False,look_for_keys=False)
                 else:
-                    ssh.connect(host, username=user,allow_agent=True,look_for_keys=True)
+                    ssh.connect(host, username=user,allow_agent=True,look_for_keys=True, pkey=pkey)
                 print("Connected to {}".format(host))
                 break
             except paramiko.AuthenticationException as e:

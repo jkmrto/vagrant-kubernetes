@@ -2,3 +2,5 @@ ubuntu-xenial-16.04-cloudimg-console.log
 .vagrant/
 .vscode/
 venv/
+lib/__pycache__
+kube_base.box
